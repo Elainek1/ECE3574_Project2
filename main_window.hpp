@@ -1,7 +1,11 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+
 #include <QWidget>
+#include "message_widget.hpp"
+#include "repl_widget.hpp"
+#include "canvas_widget.hpp"
 
 class MainWindow : public QWidget {
 	Q_OBJECT
@@ -14,6 +18,9 @@ public:
 	MainWindow(std::string filename, QWidget * parent = nullptr);
 
 private:
+	MessageWidget * messagePart;
+	REPLWidget * replPart;
+	CanvasWidget * canvasPart;
 
 };
 

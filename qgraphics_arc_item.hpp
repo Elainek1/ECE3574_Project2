@@ -1,8 +1,9 @@
-#ifndef CANVAS_WIDGET_H
-#define CANVAS_WIDGET_H
+#ifndef QGRAPHICS_ARC_ITEM_H
+#define QGRAPHICS_ARC_ITEM_H
+
 
 #include <QGraphicsEllipseItem>
-
+/*
 class QGraphicsArcItem : public QGraphicsEllipseItem {
 	Q_OBJECT
 
@@ -12,8 +13,7 @@ public:
 	virtual void paint() = 0;
 private:
 
-};
-
+};*/
 
 #endif
 

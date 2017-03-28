@@ -2,6 +2,9 @@
 #define CANVAS_WIDGET_H
 
 #include <QWidget>
+#include <qgraphicsitem.h>
+#include <QGraphicsScene>
+#include <qgraphicsview.h>
 
 class CanvasWidget : public QWidget {
 	Q_OBJECT
@@ -16,6 +19,8 @@ public slots:
 	void addGraphic(QGraphicsItem * item);
 
 private:
+	QGraphicsScene * scene;
+	QGraphicsView * view;
 	
 };
 

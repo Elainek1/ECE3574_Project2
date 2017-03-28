@@ -15,6 +15,7 @@ public:
 private slots:
 
   void initTestCase();
+  void testLabelCase();
   void testREPLGood();
   void testREPLBad();
   void testREPLBad2Good();
@@ -28,10 +29,13 @@ private:
 
   REPLWidget *repl;
   QLineEdit *replEdit;
+  QLabel * replLabel;
   MessageWidget *message;
   QLineEdit *messageEdit;
+  QLabel * messageLabel;
   CanvasWidget *canvas;
   QGraphicsScene *scene;
+  QGraphicsView * view;
 };
 
 void TestGUI::initTestCase() {
@@ -58,6 +62,32 @@ void TestGUI::initTestCase() {
   scene = canvas->findChild<QGraphicsScene *>();
   QVERIFY2(scene,
            "Could not find QGraphicsScene instance in CanvasWidget instance.");
+}
+
+void TestGUI::testLabelCase() {
+
+	repl = w.findChild<REPLWidget *>();
+	QVERIFY2(repl, "Could not find REPLWidget instance in MainWindow instance.");
+
+	replLabel = repl->findChild<QLabel *>();
+	QVERIFY2(replLabel,
+		"Could not find QLabel instance in REPLWidget instance.");
+
+	message = w.findChild<MessageWidget *>();
+	QVERIFY2(message,
+		"Could not find MessageWidget instance in MainWindow instance.");
+
+	messageLabel = message->findChild<QLabel *>();
+	QVERIFY2(messageLabel,
+		"Could not find QLabel instance in MessageWidget instance.");
+
+	canvas = w.findChild<CanvasWidget *>();
+	QVERIFY2(canvas,
+		"Could not find CanvasWidget instance in MainWindow instance.");
+
+	view = canvas->findChild<QGraphicsView *>();
+	QVERIFY2(view,
+		"Could not find QGraphicsView instance in CanvasWidget instance.");
 }
 
 void TestGUI::testREPLGood() {

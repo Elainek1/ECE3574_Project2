@@ -132,6 +132,46 @@ bool Expression::operator==(const Expression & exp) const noexcept
 				return false;
 			}
 		}
+		//if they are a point type
+		else if (this->atomType == 4)
+		{
+			//check if string values are the same and they have the same number of children
+			if ((this->valueAtom == exp.valueAtom) && (this->children.size() == exp.children.size()))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		//if they are a line type
+		else if (this->atomType == 5)
+		{
+			//check if string values are the same and they have the same number of children
+			if ((this->startAtom == exp.startAtom) && (this->endAtom == exp.endAtom) && (this->children.size() == exp.children.size()))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		//if they are a line type
+		else if (this->atomType == 5)
+		{
+			//check if string values are the same and they have the same number of children
+			if ((this->centerAtom == exp.centerAtom) && (this->startAtom == exp.startAtom) && (this->doubleAtom == exp.doubleAtom) && (this->children.size() == exp.children.size()))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 	}
 
 	return true;

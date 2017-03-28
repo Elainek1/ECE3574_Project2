@@ -2,6 +2,8 @@
 #define MESSAGE_WIDGET_H
 
 #include <QWidget>
+class QLineEdit;
+class QLabel;
 
 class MessageWidget : public QWidget {
 	Q_OBJECT
@@ -18,6 +20,8 @@ public slots:
 	void error(QString message);
 
 private:
+	QLineEdit * messageWid;
+	QLabel * messageLabel;
 };
 
 

@@ -47,7 +47,7 @@ int main(int argc, char*argv[])
 				if (!parsePass)
 				{
 					cout << "Error: Parsing error" << endl;
-					interpreter.reset();// = Interpreter(); //create reset method instead
+					//interpreter.reset();// = Interpreter(); //create reset method instead
 					//return EXIT_FAILURE;
 				}
 				//if not failed then try to build tree and evaluate it
@@ -61,7 +61,7 @@ int main(int argc, char*argv[])
 						if (result.atomType == 0)
 						{
 							//call interpreter reset method
-							interpreter.reset();
+							//interpreter.reset();
 						}
 						else
 						{
@@ -73,7 +73,7 @@ int main(int argc, char*argv[])
 					catch (InterpreterSemanticError error)
 					{
 						//call interpreter reset method
-						interpreter.reset();
+						//interpreter.reset();
 						std::cout << error.what() << "\n";
 
 					}
