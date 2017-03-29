@@ -6,6 +6,7 @@
 #include "message_widget.hpp"
 #include "repl_widget.hpp"
 #include "canvas_widget.hpp"
+#include "qt_interpreter.hpp"
 
 class MainWindow : public QWidget {
 	Q_OBJECT
@@ -21,6 +22,7 @@ private:
 	MessageWidget * messagePart;
 	REPLWidget * replPart;
 	CanvasWidget * canvasPart;
+	QtInterpreter * qInterpreter;
 
 };
 

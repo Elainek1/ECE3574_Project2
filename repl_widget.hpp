@@ -20,6 +20,9 @@ signals:
 private:
 	QLineEdit * replWid;
 	QLabel * replLabel;
+	//QtInterpreter * qInterpreter;
+private slots:
+	void grabLine();
 };
 
 

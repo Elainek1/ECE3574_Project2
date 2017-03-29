@@ -15,11 +15,16 @@ MainWindow::MainWindow(QWidget * parent) : QWidget(parent)
 	messagePart = new MessageWidget;
 	replPart = new REPLWidget;
 	canvasPart = new CanvasWidget;
+	qInterpreter = new QtInterpreter;
 	auto layout = new QGridLayout;
 	layout->addWidget(messagePart, 0, 0);
 	layout->addWidget(canvasPart, 1, 0);
 	layout->addWidget(replPart, 2, 0);
 	this->setLayout(layout);
+
+	connect(replPart, SIGNAL(lineEntered(QString)), qInterpreter, SLOT(parseAndEvaluate(QString entry)));
+	connect(qInterpreter, SIGNAL(info(QString message)), messagePart, SLOT(info(QString message)));
+
 }
 
 // Default construct a MainWidow, using filename as the script file to attempt to preload

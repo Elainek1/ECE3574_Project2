@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include <QDebug>
 #include <QWidget>
+#include <qstring.h>
 
 #include "interpreter.hpp"
 

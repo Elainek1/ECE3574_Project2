@@ -58,16 +58,16 @@ int main(int argc, char*argv[])
 					{
 						//try to evaluate the tree
 						Expression result = interpreter.eval();
-						if (result.atomType == 0)
+						/*if (result.atomType == 0)
 						{
 							//call interpreter reset method
 							//interpreter.reset();
 						}
 						else
-						{
+						{*/
 							//print out the result
 							interpreter.printExpression(result);
-						}
+						//}
 					}
 					//if error thrown then catch it and display the error
 					catch (InterpreterSemanticError error)
