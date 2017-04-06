@@ -21,10 +21,12 @@ public:
 	// the exception message string should document the nature of the semantic error 
 	Expression eval();
 	Expression evalExp(Expression * curLevel);
-	void printExpression(Expression curLevel); //print expression
+	std::string printExpression(Expression curLevel); //print expression
 	void reset(); //resets the interpreter environment
+	std::vector<Expression> getDrawList();
 private:
 	Environment environment; //intialize the environment
+	std::vector<Expression> drawList;
 	
 	//used to point to the root of the tree
 	Expression * rootAST;

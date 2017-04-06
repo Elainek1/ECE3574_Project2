@@ -6,8 +6,8 @@
 
 CanvasWidget::CanvasWidget(QWidget * parent)
 {
-	scene = new QGraphicsScene;
-	view = new QGraphicsView(scene);
+	scene = new QGraphicsScene(this);
+	view = new QGraphicsView(scene, this);
 	auto layout = new QGridLayout;
 	layout->addWidget(view);
 	this->setLayout(layout);
@@ -15,5 +15,5 @@ CanvasWidget::CanvasWidget(QWidget * parent)
 
 void CanvasWidget::addGraphic(QGraphicsItem * item)
 {
-
+	scene->addItem(item);
 }

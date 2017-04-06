@@ -9,7 +9,7 @@
 // Default construct a MainWindow
 MessageWidget::MessageWidget(QWidget * parent) : QWidget(parent)
 {
-	messageWid = new QLineEdit;
+	messageWid = new QLineEdit(this);
 	messageLabel = new QLabel("Message:");
 	messageWid->setReadOnly(true);
 	auto layout = new QGridLayout;
@@ -36,8 +36,9 @@ void MessageWidget::error(QString message)
 	QPalette *palette = new QPalette(Qt::red);
 	
 	//palette->setColor(QPalette::Base, Qt::red);
-	palette->setColor(QPalette::Text, Qt::white);
+	//palette->setColor(QPalette::Text, Qt::white);
 	palette->setColor(QPalette::Highlight, Qt::red);
+	palette->setColor(QPalette::Background, Qt::red);
 	messageWid->setPalette(*palette);
 	messageWid->setText(message);
 	messageWid->selectAll();

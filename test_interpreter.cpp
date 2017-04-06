@@ -21,7 +21,8 @@ Expression run(const std::string & program){
   if(!ok){
     std::cerr << "Failed to parse: " << program << std::endl; 
   }
-  REQUIRE(ok == true);
+  REQUIRE(ok);
+  //REQUIRE(ok == true);
 
   Expression result;
   REQUIRE_NOTHROW(result = interp.eval());
@@ -40,7 +41,8 @@ Expression runfile(const std::string & fname){
   if(!ok){
     std::cerr << "Failed to parse file: " << fname << std::endl; 
   }
-  REQUIRE(ok == true);
+  REQUIRE(ok);
+  //REQUIRE(ok == true);
 
   Expression result;
   REQUIRE_NOTHROW(result = interp.eval());
@@ -57,8 +59,8 @@ TEST_CASE( "Test Interpreter parser with expected input", "[interpreter]" ) {
   Interpreter interp;
 
   bool ok = interp.parse(iss);
-
-  REQUIRE(ok == true);
+  REQUIRE(ok);
+  //REQUIRE(ok == true);
 }
 
 TEST_CASE( "Test Interpreter parser with numerical literals", "[interpreter]" ) {
@@ -71,8 +73,8 @@ TEST_CASE( "Test Interpreter parser with numerical literals", "[interpreter]" ) 
     Interpreter interp;
 
     bool ok = interp.parse(iss);
-
-    REQUIRE(ok == true);
+	REQUIRE(ok);
+    //REQUIRE(ok == true);
   }
 }
 
@@ -84,7 +86,8 @@ TEST_CASE( "Test Interpreter parser with truncated input", "[interpreter]" ) {
   
     Interpreter interp;
     bool ok = interp.parse(iss);
-    REQUIRE(ok == false);
+	REQUIRE(!ok);
+	//REQUIRE(ok == false);
   }
   {
     std::string program = "(f";
@@ -92,7 +95,8 @@ TEST_CASE( "Test Interpreter parser with truncated input", "[interpreter]" ) {
   
     Interpreter interp;
     bool ok = interp.parse(iss);
-    REQUIRE(ok == false);
+	REQUIRE(!ok);
+	//REQUIRE(ok == false);
   }
   
   {
@@ -101,7 +105,8 @@ TEST_CASE( "Test Interpreter parser with truncated input", "[interpreter]" ) {
 
     Interpreter interp;
     bool ok = interp.parse(iss);
-    REQUIRE(ok == false);
+	REQUIRE(!ok);
+	//REQUIRE(ok == false);
   }
 }
 //added test case
@@ -114,7 +119,8 @@ TEST_CASE("Test Interpreter parser with second half input", "[interpreter]") {
 
 		Interpreter interp;
 		bool ok = interp.parse(iss);
-		REQUIRE(ok == false);
+		REQUIRE(!ok);
+		//REQUIRE(ok == false);
 	}
 
 	{
@@ -123,7 +129,8 @@ TEST_CASE("Test Interpreter parser with second half input", "[interpreter]") {
 
 		Interpreter interp;
 		bool ok = interp.parse(iss);
-		REQUIRE(ok == false);
+		REQUIRE(!ok); 
+		//REQUIRE(ok == false);
 	}
 
 	{
@@ -132,7 +139,8 @@ TEST_CASE("Test Interpreter parser with second half input", "[interpreter]") {
 
 		Interpreter interp;
 		bool ok = interp.parse(iss);
-		REQUIRE(ok == false);
+		REQUIRE(!ok); 
+		//REQUIRE(ok == false);
 	}
 }
 
@@ -145,7 +153,8 @@ TEST_CASE( "Test Interpreter parser with extra input", "[interpreter]" ) {
 
   bool ok = interp.parse(iss);
 
-  REQUIRE(ok == false);
+  REQUIRE(!ok);
+  //REQUIRE(ok == false);
 }
 
 //added test case
@@ -158,7 +167,8 @@ TEST_CASE("Test Interpreter parser with extra ( input", "[interpreter]") {
 
 	bool ok = interp.parse(iss);
 
-	REQUIRE(ok == false);
+	REQUIRE(!ok); 
+	//REQUIRE(ok == false);
 }
 
 //added test case
@@ -172,7 +182,8 @@ TEST_CASE("Test Interpreter parser with imblanced ()", "[interpreter]") {
 
 		bool ok = interp.parse(iss);
 
-		REQUIRE(ok == false);
+		REQUIRE(!ok); 
+		//REQUIRE(ok == false);
 	}
 
 	{
@@ -183,7 +194,8 @@ TEST_CASE("Test Interpreter parser with imblanced ()", "[interpreter]") {
 
 		bool ok = interp.parse(iss);
 
-		REQUIRE(ok == false);
+		REQUIRE(!ok); 
+		//REQUIRE(ok == false);
 	}
 }
 
@@ -197,7 +209,8 @@ TEST_CASE( "Test Interpreter parser with single non-keyword", "[interpreter]" ) 
 
   bool ok = interp.parse(iss);
 
-  REQUIRE(ok == false);
+  REQUIRE(!ok); 
+  //REQUIRE(ok == false);
 }
 
 TEST_CASE( "Test Interpreter parser with empty input", "[interpreter]" ) {
@@ -209,7 +222,8 @@ TEST_CASE( "Test Interpreter parser with empty input", "[interpreter]" ) {
 
   bool ok = interp.parse(iss);
 
-  REQUIRE(ok == false);
+  REQUIRE(!ok); 
+  //REQUIRE(ok == false);
 }
 
 TEST_CASE( "Test Interpreter parser with empty expression", "[interpreter]" ) {
@@ -221,7 +235,8 @@ TEST_CASE( "Test Interpreter parser with empty expression", "[interpreter]" ) {
 
   bool ok = interp.parse(iss);
 
-  REQUIRE(ok == false);
+  REQUIRE(!ok); 
+  //REQUIRE(ok == false);
 }
 
 TEST_CASE( "Test Interpreter parser with bad number string", "[interpreter]" ) {
@@ -233,7 +248,8 @@ TEST_CASE( "Test Interpreter parser with bad number string", "[interpreter]" ) {
 
   bool ok = interp.parse(iss);
 
-  REQUIRE(ok == false);
+  REQUIRE(!ok); 
+  //REQUIRE(ok == false);
 }
 
 TEST_CASE( "Test Interpreter parser with incorrect input. Regression Test", "[interpreter]" ) {
@@ -245,7 +261,8 @@ TEST_CASE( "Test Interpreter parser with incorrect input. Regression Test", "[in
 
   bool ok = interp.parse(iss);
 
-  REQUIRE(ok == false);
+  REQUIRE(!ok); 
+  //REQUIRE(ok == false);
 }
 
 TEST_CASE( "Test Interpreter result with literal expressions", "[interpreter]" ) {
@@ -541,7 +558,8 @@ TEST_CASE( "Test some semantically invalid expresions", "[interpreter]" ) {
       std::istringstream iss(s);
       
       bool ok = interp.parse(iss);
-      REQUIRE(ok == true);
+	  REQUIRE(ok);
+	  //REQUIRE(ok == true);
 
       REQUIRE_THROWS_AS(interp.eval(), InterpreterSemanticError);
     }
@@ -588,7 +606,8 @@ TEST_CASE( "Test file tests/test0.vts", "[interpreter]" ) {
   Interpreter interp;
     
   bool ok = interp.parse(ifs);
-  REQUIRE(ok == false);
+  REQUIRE(!ok); 
+  //REQUIRE(ok == false);
 }
 
 TEST_CASE( "Test syntactically correct file using CRLF (Windows) line endings.", "[interpreter]" ) {
@@ -613,7 +632,8 @@ TEST_CASE( "Test syntactically INCORRECT files", "[interpreter]" ) {
   Interpreter interp;
     
   bool ok = interp.parse(ifs);
-  REQUIRE(ok == false);
+  REQUIRE(!ok); 
+  //REQUIRE(ok == false);
 }
 
 TEST_CASE( "Test all syntactically and semantically CORRECT files.", "[interpreter]" ) {
@@ -632,3 +652,127 @@ TEST_CASE( "Test all syntactically and semantically CORRECT files.", "[interpret
     REQUIRE(result == expected_result);
   }
 }
+
+/*
+//added test case
+TEST_CASE("Test Interpreter parser with second half input", "[interpreter]") {
+
+
+	{
+		std::string program = ")";
+		std::istringstream iss(program);
+
+		Interpreter interp;
+		bool ok = interp.parse(iss);
+		REQUIRE(ok == false);
+	}
+
+	{
+		std::string program = "f)";
+		std::istringstream iss(program);
+
+		Interpreter interp;
+		bool ok = interp.parse(iss);
+		REQUIRE(ok == false);
+	}
+
+	{
+		std::string program = "gin (define r 10) (* pi (* r r)))";
+		std::istringstream iss(program);
+
+		Interpreter interp;
+		bool ok = interp.parse(iss);
+		REQUIRE(ok == false);
+	}
+}
+
+//added cases
+TEST_CASE("Test Interpreter special forms: begin, define, and if", "[interpreter]") {
+
+	{
+		std::string program = "(begin (define a True) (if a 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(200.));
+	}
+
+	{
+		std::string program = "(begin (define a False) (if a 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(100.));
+	}
+}
+//added cases
+TEST_CASE("Test Interpreter special forms: begin, define, if, and <", "[interpreter]") {
+
+	{
+		std::string program = "(begin (define a 1) (if (< a 2) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(200.));
+	}
+
+	{
+		std::string program = "(begin (define a 1) (if (< a 0) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(100.));
+	}
+}
+
+//added cases
+TEST_CASE("Test Interpreter special forms: begin, define, if, and <=", "[interpreter]") {
+
+	{
+		std::string program = "(begin (define a 1) (if (<= a 2) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(200.));
+	}
+
+	{
+		std::string program = "(begin (define a 1) (if (<= a 0) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(100.));
+	}
+
+	{
+		std::string program = "(begin (define a 1) (if (<= a 1) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(200.));
+	}
+}
+//added cases
+TEST_CASE("Test Interpreter special forms: begin, define, if, and >", "[interpreter]") {
+
+	{
+		std::string program = "(begin (define a 3) (if (> a 2) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(200.));
+	}
+
+	{
+		std::string program = "(begin (define a 1) (if (> a 2) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(100.));
+	}
+}
+//added cases
+TEST_CASE("Test Interpreter special forms: begin, define, if, and >=", "[interpreter]") {
+
+	{
+		std::string program = "(begin (define a 1) (if (>= a 2) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(100.));
+	}
+
+	{
+		std::string program = "(begin (define a 1) (if (>= a 0) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(200.));
+	}
+
+	{
+		std::string program = "(begin (define a 1) (if (>= a 1) 200 100))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(200.));
+	}
+}
+//added cases
+*/

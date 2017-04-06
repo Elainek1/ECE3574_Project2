@@ -37,7 +37,7 @@ bool Interpreter::parse(std::istream & expression) noexcept
 	while (!expression.eof()) //while there is still input
 	{
 		getline(expression, inputPart);  //get the line
-		for (int i = 0; i < inputPart.size(); i++)  //this checks to see if there is a ;
+		for (unsigned int i = 0; i < inputPart.size(); i++)  //this checks to see if there is a ;
 		{
 			if (inputPart[i] == ';') //if there is one then the rest following it is a comment
 			{
@@ -72,6 +72,7 @@ bool Interpreter::parse(std::istream & expression) noexcept
 // the exception message string should document the nature of the semantic error 
 Expression Interpreter::eval()
 {
+	drawList.clear();
 	try
 	{
 		Expression answer = evalExp(rootAST); //try to evaluate the tree
@@ -390,53 +391,57 @@ void Interpreter::deleteAST(Expression * curLevel)
 
 //this prints the expression out
 //the pointer that is fed in is the pointer to the expression that we want to print
-void Interpreter::printExpression(Expression curLevel)
+std::string Interpreter::printExpression(Expression curLevel)
 {
+	std::ostringstream strs;
+
+
 	if (curLevel.atomType == 0) //if it is a none type then you print ()
 	{
-		std::cout << "(None)\n";
+		strs << "(None)";
 	}
 	else if (curLevel.atomType == 1) //if it is a boolean type
 	{
 		if (curLevel.boolAtom) //then read the value
 		{
-			std::cout << "(True)\n"; //if it is true then print true
+			strs << "(True)"; //if it is true then print true
 		}
 		else //else print false
 		{
-			std::cout << "(False)\n";
+			strs << "(False)";
 		}
 	}
 	else if (curLevel.atomType == 2) //if it is a double type
 	{
-		std::cout << "(" << curLevel.doubleAtom << ")\n"; //then print the value of the double
+		strs << "(" << curLevel.doubleAtom << ")"; //then print the value of the double
 	}
 	else if (curLevel.atomType == 3) //if it is a string type
 	{
-		std::cout << "(" << curLevel.stringAtom << ")\n"; //then print the value of the string
+		strs << "(" << curLevel.stringAtom << ")"; //then print the value of the string
 	}
 	else if (curLevel.atomType == 4) //if it is a point type
 	{
-		std::cout << "(" << std::get<0>(curLevel.valueAtom);
-		std::cout << "," << std::get<1>(curLevel.valueAtom);
-		std::cout << ")\n";
+		strs << "(" << std::get<0>(curLevel.valueAtom);
+		strs << "," << std::get<1>(curLevel.valueAtom);
+		strs << ")";
 	}
 	else if (curLevel.atomType == 5)//if it is a line type
 	{
 		std::tuple<double, double> start = curLevel.startAtom;
 		std::tuple<double, double> end = curLevel.endAtom;
-		std::cout << "((" << std::get<0>(start) << "," << std::get<1>(start);
-		std::cout << "),(" << std::get<0>(end) << "," << std::get<1>(end) << "))\n";
+		strs << "((" << std::get<0>(start) << "," << std::get<1>(start);
+		strs << "),(" << std::get<0>(end) << "," << std::get<1>(end) << "))";
 	}
 	else if (curLevel.atomType == 6)//if it is a line type
 	{
 		std::tuple<double, double> center = curLevel.centerAtom;
 		std::tuple<double, double> start = curLevel.startAtom;
-		std::cout << "((" << std::get<0>(center) << "," << std::get<1>(center);
-		std::cout << "),(" << std::get<0>(start) << "," << std::get<1>(start) << ") " << curLevel.doubleAtom<< ")\n";
+		strs << "((" << std::get<0>(center) << "," << std::get<1>(center);
+		strs << "),(" << std::get<0>(start) << "," << std::get<1>(start) << ") " << curLevel.doubleAtom<< ")";
 	}
-	
-	return;
+	std::string returnVal = strs.str();
+	std::cout << returnVal;
+	return returnVal;
 }
 
 //this epxression takes in a token and the pointer that is suppose to pointer to the expression created
@@ -509,7 +514,7 @@ Expression Interpreter::add(Expression * curLevel)
 				}
 				else
 				{
-					std::string error = "Error: Incorrrect argument type for +";
+					std::string error = "Error: Incorrrect argument type for + \n";
 					throw InterpreterSemanticError(error);
 					//return Expression();
 				}
@@ -1305,7 +1310,11 @@ Expression Interpreter::draw(Expression * curLevel)
 			for (unsigned int childIndex = 0; childIndex < curLevel->children.size(); childIndex++)
 			{
 				Expression child = evalExp(curLevel->children[childIndex]);
-				if (child.atomType == 4) //if it is a point
+				if ((child.atomType == 4) || (child.atomType == 5) || (child.atomType == 6))
+				{
+					drawList.push_back(child);
+				}
+				/*if (child.atomType == 4) //if it is a point
 				{
 					std::cout << "draw point\n";
 					//draw point
@@ -1319,7 +1328,7 @@ Expression Interpreter::draw(Expression * curLevel)
 				{
 					std::cout << "draw arc\n";
 					//draw arc
-				}
+				}*/
 				else
 				{
 					std::string error = "Error: Incorrrect argument type for draw";
@@ -1331,7 +1340,7 @@ Expression Interpreter::draw(Expression * curLevel)
 		}
 		else
 		{
-			std::string error = "Error: Incorrrect number of arguments for draw";
+			std::string error = "Error: No arguments for draw";
 			throw InterpreterSemanticError(error);
 			//return Expression();
 		}
@@ -1340,4 +1349,9 @@ Expression Interpreter::draw(Expression * curLevel)
 	{
 		throw;
 	}
+}
+
+std::vector<Expression> Interpreter::getDrawList()
+{
+	return drawList;
 }

@@ -1,6 +1,8 @@
 #include "expression.hpp"
 #include <iostream>
 #include <tuple>
+#include <limits>
+#include <cmath>
 
 Expression::Expression()
 {
@@ -79,100 +81,53 @@ Expression::Expression(std::tuple<double, double> center, std::tuple<double, dou
 	doubleAtom = angle;
 }
 
-
-
 // Equality operator for two Expressions, two expressions are equal if the have the same 
 // type, atom value, and number of arguments
 bool Expression::operator==(const Expression & exp) const noexcept
 {
-	//checks to see if it is the same type
-	if (this->atomType == exp.atomType)
-	{
-		//if it a none type then its true
-		if (this->atomType == 0)
-		{
-			return true;
+	bool returnVal = false;
+	if (this->atomType == exp.atomType){ //checks to see if it is the same type
+		if (this->atomType == 0){ //if it a none type then its true
+			returnVal = true;
 		}
-		//if it is a boolean
-		else if (this->atomType == 1)
+		else if (this->atomType == 1) //if it is a boolean
 		{
-			//check if boolean values are the same and they have same number of children
-			if ((this->boolAtom == exp.boolAtom) && (this->children.size() == exp.children.size()))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
+			if ((this->boolAtom == exp.boolAtom) && (this->children.size() == exp.children.size())){ //check if boolean values are the same and they have same number of children
+				returnVal = true;
 			}
 		}
-		//if it is a double
-		else if (this->atomType == 2)
-		{
+		else if (this->atomType == 2){ //if it is a double
+			double d1 = this->doubleAtom;
+			double d2 = exp.doubleAtom;
 			//check if double values are the same and they have the same number of children
-			if ((this->doubleAtom == exp.doubleAtom) && (this->children.size() == exp.children.size()))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
+			if ((std::abs(d1 - d2) < (std::numeric_limits<double>::epsilon())) && (this->children.size() == exp.children.size())){
+				returnVal = true;
 			}
 		}
-		//if they are a string type
-		else if (this->atomType == 3)
-		{
+		else if (this->atomType == 3){ //if they are a string type
 			//check if string values are the same and they have the same number of children
-			if ((this->stringAtom == exp.stringAtom) && (this->children.size() == exp.children.size()))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
+			if ((this->stringAtom == exp.stringAtom) && (this->children.size() == exp.children.size())){
+				returnVal = true;
 			}
 		}
-		//if they are a point type
-		else if (this->atomType == 4)
-		{
+		else if (this->atomType == 4){  //if they are a point type
 			//check if string values are the same and they have the same number of children
-			if ((this->valueAtom == exp.valueAtom) && (this->children.size() == exp.children.size()))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
+			if ((this->valueAtom == exp.valueAtom) && (this->children.size() == exp.children.size())){
+				returnVal = true;
 			}
 		}
-		//if they are a line type
-		else if (this->atomType == 5)
-		{
+		else if (this->atomType == 5){  //if they are a line type
 			//check if string values are the same and they have the same number of children
-			if ((this->startAtom == exp.startAtom) && (this->endAtom == exp.endAtom) && (this->children.size() == exp.children.size()))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
+			if ((this->startAtom == exp.startAtom) && (this->endAtom == exp.endAtom) && (this->children.size() == exp.children.size())){
+				returnVal = true;
 			}
 		}
-		//if they are a line type
-		else if (this->atomType == 5)
-		{
+		else if (this->atomType == 6){ 	//if they are an arc type
 			//check if string values are the same and they have the same number of children
-			if ((this->centerAtom == exp.centerAtom) && (this->startAtom == exp.startAtom) && (this->doubleAtom == exp.doubleAtom) && (this->children.size() == exp.children.size()))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
+			if ((this->centerAtom == exp.centerAtom) && (this->startAtom == exp.startAtom) && (this->doubleAtom == exp.doubleAtom) && (this->children.size() == exp.children.size())){
+				returnVal = true;
 			}
 		}
-
 	}
-
-	return true;
+	return returnVal;
 }

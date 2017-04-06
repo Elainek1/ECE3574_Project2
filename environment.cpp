@@ -84,34 +84,32 @@ bool Environment::addArcSymbol(std::string symbol, std::tuple<double, double> ce
 //the value return indicates which map is it located in or 0 means it is not in any mapping
 int Environment::symbolExist(std::string symbol)
 {
+	int returnVal = 0;
 	if (environmentMap6.find(symbol) != environmentMap6.end()) //if it is in the fourth map for points return 4
 	{
-		return 6;
+		returnVal = 6;
 	}
 	else if (environmentMap5.find(symbol) != environmentMap5.end()) //if it is in the fourth map for points return 4
 	{
-		return 5;
+		returnVal = 5;
 	}
 	else if (environmentMap4.find(symbol) != environmentMap4.end()) //if it is in the fourth map for points return 4
 	{
-		return 4;
+		returnVal = 4;
 	}
 	else if (environmentMap1.find(symbol) != environmentMap1.end()) //if it is in the first map then return 1
 	{
-		return 1;
+		returnVal = 1;
 	}
 	else if (environmentMap2.find(symbol) != environmentMap2.end()) //if it is in the second map then return 2
 	{
-		return 2;
+		returnVal = 2;
 	}
 	else if (environmentMap0.find(symbol) != environmentMap0.end()) //this is for later when I implement function pointers
 	{
-		return 3;
+		returnVal = 3;
 	}
-	else
-	{
-		return 0; //otherwise is not in any maps
-	}
+	return returnVal;
 }
 
 //this resets the environment to the beginning

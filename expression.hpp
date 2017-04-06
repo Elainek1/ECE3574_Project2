@@ -53,9 +53,13 @@ public:
 		std::tuple<double, double> start,
 		double angle);
 
+	bool almost_equal(const double x, const double y);
+
 	// Equality operator for two Expressions, two expressions are equal if the have the same 
 	// type, atom value, and number of arguments
 	bool operator==(const Expression & exp) const noexcept;
+
+
 };
 
 #endif

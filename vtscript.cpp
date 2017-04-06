@@ -14,162 +14,86 @@ using namespace std;
 
 int main(int argc, char*argv[])
 {
-	Interpreter interpreter;// = Interpreter();
-	string filename;  //for storing the filename grabbed from commandline
-	string input;
+	Interpreter interpreter;
+	string filename, input;  //for storing the filename grabbed from commandline
 	std::vector<std::string>  arguments;
-    for(int i = 0; i < argc; ++i)
-	{
+    for(int i = 0; i < argc; ++i){
 		arguments.push_back(argv[i]);
 	}
-    // code can use arguments as a C++ vector of C++ strings 
-	
-	//if no arguments then enter repel mode
-	if(argc == 1)
-	{
-		//std::vector<std::string> tokens;
-		while (true)
-		{
-			//prompt user
+	if(argc == 1){ 	//if no arguments then enter repel mode
+		while (true){
 			cout << "vtscript>";
 			getline(cin, input);
-			if (input == "quit")
-			{
-				//if wants to quit then return
+			if (input == "quit"){ //if wants to quit then return
 				break;
 			}
-			else if (input != "")
-			{
-				//parse the input
+			else if (input != ""){
 				std::istringstream inputString(input);
 				bool parsePass = interpreter.parse(inputString);
-				//if parse fails then print error and reset interpreter
-				if (!parsePass)
-				{
+				if (!parsePass){ //if parse fails then print error
 					cout << "Error: Parsing error" << endl;
-					//interpreter.reset();// = Interpreter(); //create reset method instead
-					//return EXIT_FAILURE;
 				}
-				//if not failed then try to build tree and evaluate it
-				else
-				{
-
-					try
-					{
-						//try to evaluate the tree
+				else{ //if not failed then try to build tree and evaluate it
+					try{ //try to evaluate the tree
 						Expression result = interpreter.eval();
-						/*if (result.atomType == 0)
-						{
-							//call interpreter reset method
-							//interpreter.reset();
-						}
-						else
-						{*/
-							//print out the result
-							interpreter.printExpression(result);
-						//}
+						interpreter.printExpression(result);
+						cout << "\n";
 					}
-					//if error thrown then catch it and display the error
-					catch (InterpreterSemanticError error)
-					{
-						//call interpreter reset method
-						//interpreter.reset();
+					catch (InterpreterSemanticError error){ //if error thrown then catch it and display the error
 						std::cout << error.what() << "\n";
-
 					}
 				}
-			}
-			
+			}	
 		}
 	}
-	//if a file name has been given then open it to become an input stream
-	else if(argc == 2)
-	{
+	else if(argc == 2){ //if a file name has been given then open it to become an input stream
 		filename = arguments[argc-1];
 		ifstream inputString(filename);
-		if (!inputString)
-		{
-			cout << "Error: Could not open file" << endl;
+		if (!inputString.good()){
+			cout << "Error: Could not open file\n";
 			return EXIT_FAILURE; //if file doesnt open then return failure
 		}
-		//parse input
 		bool parsePass = interpreter.parse(inputString);
-		if (!parsePass)
-		{
-			cout << "Error: Parsing error" << endl;
+		if (!parsePass){
+			cout << "Error: Parsing error\n";
 			return EXIT_FAILURE;  //if parsing fails then return failure
 		}
-		else
-		{
-			//otherwise try evaluating tree
-			try
-			{
-				Expression result = interpreter.eval();
-				if (result.atomType == 0)
-				{
-					std::cout << "Error when evaluating \n";
-					return EXIT_FAILURE;  //if evaluating tree fails then return failure
-				}
-				else
-				{
-					//print out result
-					interpreter.printExpression(result);
-				}
-			}
-			//catch error thrown
-			catch (InterpreterSemanticError error)
-			{
-				std::cout << error.what() << "\n";  //print out error
-				return EXIT_FAILURE; //return exit failure
-			}
+		try{ //otherwise try evaluating tree
+			Expression result = interpreter.eval();
+			interpreter.printExpression(result);
+		}
+		catch (InterpreterSemanticError error){ //catch error thrown
+			std::cout << error.what() << "\n";  //print out error
+			return EXIT_FAILURE; //return exit failure
 		}
 	}
-	//if -e flag is given then use the next argument as input
-	else if(argc == 3)
-	{
-		if(arguments[argc-2]=="-e")
-		{
+	else if(argc == 3){ //if -e flag is given then use the next argument as input
+		if(arguments[argc-2]=="-e"){
 			input = arguments[argc-1];
 			std::istringstream inputString(input);
-			
 			bool parsePass = interpreter.parse(inputString);
-			if (!parsePass)
-			{
-				cout << "Error: Parsing error" << endl;
+			if (!parsePass){
+				cout << "Error: Parsing error\n";
 				return EXIT_FAILURE;
 			}
-			else
-			{
-				try
-				{
+			else{
+				try{
 					Expression result = interpreter.eval();
-					if (result.atomType == 0)
-					{
-						std::cout << "Error when evaluating \n";
-						return EXIT_FAILURE;
-					}
-					else
-					{
 						interpreter.printExpression(result);
-					}
 				}
-				catch (InterpreterSemanticError error)
-				{
+				catch (InterpreterSemanticError error){
 					std::cout << error.what() << "\n";
 					return EXIT_FAILURE;
 				}
 			}
 		}
-		//otherwise the argument wasn't what it was expecting
-		else
-		{
-			cout << "Error: Unexpected arguments of " << arguments[argc-2] << endl; //not appropriate -e flag specified so return with exit failure
+		else{ //otherwise the argument wasn't what it was expecting
+			cout << "Error: Unexpected arguments of " << arguments[argc-2] << "\n"; //not appropriate -e flag specified so return with exit failure
 			return EXIT_FAILURE;
 		}
 	}
-	else
-	{
-		cout << "Error: Unexpected number of arguments" << endl; //no filename specified so return with exit failure
+	else{
+		cout << "Error: Unexpected number of arguments" << "\n"; //no filename specified so return with exit failure
 		return EXIT_FAILURE;
 	}
     return EXIT_SUCCESS;  //return success

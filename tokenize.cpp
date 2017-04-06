@@ -13,7 +13,7 @@ std::vector<std::string> tokenizeInput(std::istream & inputString)
 	{
 		
 		std::string variable; //this is for multicharacter tokens
-		for (int i = 0; i < token.size(); i++) //iterate through each token to parse out the ( and )
+		for (unsigned int i = 0; i < token.size(); i++) //iterate through each token to parse out the ( and )
 		{
 			if (token[i] == '(') //push ( into vector
 			{

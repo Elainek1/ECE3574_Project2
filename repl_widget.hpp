@@ -2,6 +2,7 @@
 #define REPL_WIDGET_H
 
 #include <QWidget>
+#include <vector>
 
 class QLineEdit;
 class QLabel;
@@ -15,12 +16,15 @@ public:
 
 	// A signal that sends the current edited text as a QString when the return key is pressed.
 signals:
-	void lineEntered(QString);
-
+	void lineEntered(QString );
+protected:
+	virtual void keyPressEvent(QKeyEvent *event);
 private:
 	QLineEdit * replWid;
 	QLabel * replLabel;
 	//QtInterpreter * qInterpreter;
+	std::vector<QString> history;
+	int histPlace;
 private slots:
 	void grabLine();
 };
