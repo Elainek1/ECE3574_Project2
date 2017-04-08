@@ -85,11 +85,11 @@ bool Environment::addArcSymbol(std::string symbol, std::tuple<double, double> ce
 int Environment::symbolExist(std::string symbol)
 {
 	int returnVal = 0;
-	if (environmentMap6.find(symbol) != environmentMap6.end()) //if it is in the fourth map for points return 4
+	if (environmentMap6.find(symbol) != environmentMap6.end()) //if it is in the sixth map for arcs return 6
 	{
 		returnVal = 6;
 	}
-	else if (environmentMap5.find(symbol) != environmentMap5.end()) //if it is in the fourth map for points return 4
+	else if (environmentMap5.find(symbol) != environmentMap5.end()) //if it is in the fifth map for lines return 5
 	{
 		returnVal = 5;
 	}
@@ -105,14 +105,14 @@ int Environment::symbolExist(std::string symbol)
 	{
 		returnVal = 2;
 	}
-	else if (environmentMap0.find(symbol) != environmentMap0.end()) //this is for later when I implement function pointers
-	{
-		returnVal = 3;
-	}
+	//else if (environmentMap0.find(symbol) != environmentMap0.end()) //this is for later when I implement function pointers
+	//{
+	//	returnVal = 3;
+	//}
 	return returnVal;
 }
 
-//this resets the environment to the beginning
+/*//this resets the environment to the beginning
 void Environment::reset()
 {
 	environmentMap1.clear();
@@ -152,7 +152,7 @@ void Environment::reset()
 functPtr Environment::getFunctPtr(std::string symbol)
 {
 	return environmentMap0[symbol];
-}
+}*/
 
 //this returns the double symbol value
 double Environment::getDoubleSymbol(std::string symbol)

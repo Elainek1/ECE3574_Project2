@@ -22,7 +22,7 @@ public:
 	Expression eval();
 	Expression evalExp(Expression * curLevel);
 	std::string printExpression(Expression curLevel); //print expression
-	void reset(); //resets the interpreter environment
+	//void reset(); //resets the interpreter environment
 	std::vector<Expression> getDrawList();
 private:
 	Environment environment; //intialize the environment
@@ -39,7 +39,11 @@ private:
 
 	Expression* checkToken(std::string token, Expression * curLevel); //this reads in the token and checks for parsing error
 
-	void traversePost(Expression* curLevel); //traverses the tree and prints it out
+	//void traversePost(Expression* curLevel); //traverses the tree and prints it out
+
+	Expression checkExp(Expression * curLevel);
+	Expression checkEnviroExp(Expression * curLevel);
+	Expression checkSpecialExp(Expression * curLevel);
 
 	//functions to evaluate the expressions
 	Expression add(Expression * curLevel);

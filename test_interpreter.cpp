@@ -172,6 +172,20 @@ TEST_CASE("Test Interpreter parser with extra ( input", "[interpreter]") {
 }
 
 //added test case
+TEST_CASE("Test Interpreter and tokenizer", "[interpreter]") {
+
+	std::string program = "(define a(2))";
+	std::istringstream iss(program);
+
+	Interpreter interp;
+
+	bool ok = interp.parse(iss);
+
+	REQUIRE(ok);
+	//REQUIRE(ok == false);
+}
+
+//added test case
 TEST_CASE("Test Interpreter parser with imblanced ()", "[interpreter]") {
 
 	{
@@ -312,6 +326,41 @@ TEST_CASE( "Test Interpreter result with simple procedures (add)", "[interpreter
     Expression result = run(program);
     REQUIRE(result == Expression(21.));
   }
+}
+
+TEST_CASE("Test Interpreter not equal cases", "[interpreter]") {
+
+	{ // not equal case for double
+		std::string program = "(3)";
+		Expression result = run(program);
+		REQUIRE(!(result == Expression(0.)));
+	}
+	{ // not equal case for double
+		std::string program = "(3)";
+		Expression result = run(program);
+		REQUIRE(!(result == Expression(0.)));
+	}
+}
+
+TEST_CASE("Test Interpreter result with sin, cos, arctan, and draw", "[interpreter]") {
+
+	{ // sin case
+		std::string program = "(begin (define a (sin (/ pi 2))) (a))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(1.));
+	}
+
+	{ // cos case
+		std::string program = "(begin (define b (cos pi)) (b))";
+		Expression result = run(program);
+		REQUIRE(result == Expression(-1.));
+	}
+
+	{ // arctan case
+		std::string program = "(begin (define c (arctan 0 1)) c)";
+		Expression result = run(program);
+		REQUIRE(result == Expression(0.));
+	}
 }
   
 TEST_CASE( "Test Interpreter special form: if", "[interpreter]" ) {
@@ -544,6 +593,55 @@ TEST_CASE( "Test trig procedures", "[interpreter]" ) {
     
     REQUIRE_THROWS_AS(interp.eval(), InterpreterSemanticError);
   }
+}
+
+TEST_CASE("Test error checking", "[interpreter]") {
+
+	std::vector<std::string> programs = { "(+ )",
+		"(/ 1 2 3)",
+		"(/ True)",
+		"(* True)",
+		"(* )",
+		"(- True)",
+		"(- 1 False)", 
+		"(= 1)",
+		"(= 1 True)",
+		"(>= 1)",
+		"(>= 1 True)",
+		"(> 1)",
+		"(> 1 True)",
+		"(<= 1)",
+		"(<= 1 True)",
+		"(< 1)",
+		"(< 1 True)",
+		"(or 1)",
+		"(or )",
+		"(and 1)",
+		"(and )",
+		"(not 23)",
+		"(not 23 32 23)",
+		"(if 23)",
+		"(if 23 32 23)",
+		"(begin )",
+		"(define a )",
+		"(point True True)",
+		"(point 0 )",
+		"(line True True)",
+		"(line (point 0 0))",
+		"(arc True True True)",
+		"(arc True)",
+		"(draw True True)",
+		"(draw )",
+		};
+	for (auto s : programs) {
+		Interpreter interp;
+
+		std::istringstream iss(s);
+
+		REQUIRE(interp.parse(iss));
+
+		REQUIRE_THROWS_AS(interp.eval(), InterpreterSemanticError);
+	}
 }
 
 TEST_CASE( "Test some semantically invalid expresions", "[interpreter]" ) {

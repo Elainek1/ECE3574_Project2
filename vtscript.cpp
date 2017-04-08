@@ -11,50 +11,26 @@
 #include <cstdint>
 #include <iomanip>
 using namespace std;
+void replMode();
 
-int main(int argc, char*argv[])
-{
-	Interpreter interpreter;
-	string filename, input;  //for storing the filename grabbed from commandline
+int main(int argc, char*argv[]){
+	//Interpreter interpreter;
+	string input;  //for storing the filename grabbed from commandline
 	std::vector<std::string>  arguments;
     for(int i = 0; i < argc; ++i){
 		arguments.push_back(argv[i]);
 	}
-	if(argc == 1){ 	//if no arguments then enter repel mode
-		while (true){
-			cout << "vtscript>";
-			getline(cin, input);
-			if (input == "quit"){ //if wants to quit then return
-				break;
-			}
-			else if (input != ""){
-				std::istringstream inputString(input);
-				bool parsePass = interpreter.parse(inputString);
-				if (!parsePass){ //if parse fails then print error
-					cout << "Error: Parsing error" << endl;
-				}
-				else{ //if not failed then try to build tree and evaluate it
-					try{ //try to evaluate the tree
-						Expression result = interpreter.eval();
-						interpreter.printExpression(result);
-						cout << "\n";
-					}
-					catch (InterpreterSemanticError error){ //if error thrown then catch it and display the error
-						std::cout << error.what() << "\n";
-					}
-				}
-			}	
-		}
+	if((argc == 1)|| (argc > 3)){ 	//if no arguments then enter repel mode	
+		replMode();
 	}
 	else if(argc == 2){ //if a file name has been given then open it to become an input stream
-		filename = arguments[argc-1];
-		ifstream inputString(filename);
+		Interpreter interpreter;
+		ifstream inputString(arguments[argc - 1]);
 		if (!inputString.good()){
 			cout << "Error: Could not open file\n";
 			return EXIT_FAILURE; //if file doesnt open then return failure
 		}
-		bool parsePass = interpreter.parse(inputString);
-		if (!parsePass){
+		if (!interpreter.parse(inputString)){
 			cout << "Error: Parsing error\n";
 			return EXIT_FAILURE;  //if parsing fails then return failure
 		}
@@ -68,23 +44,21 @@ int main(int argc, char*argv[])
 		}
 	}
 	else if(argc == 3){ //if -e flag is given then use the next argument as input
+		Interpreter interpreter;
 		if(arguments[argc-2]=="-e"){
 			input = arguments[argc-1];
 			std::istringstream inputString(input);
-			bool parsePass = interpreter.parse(inputString);
-			if (!parsePass){
+			if (!interpreter.parse(inputString)){
 				cout << "Error: Parsing error\n";
 				return EXIT_FAILURE;
 			}
-			else{
-				try{
-					Expression result = interpreter.eval();
-						interpreter.printExpression(result);
-				}
-				catch (InterpreterSemanticError error){
-					std::cout << error.what() << "\n";
-					return EXIT_FAILURE;
-				}
+			try{
+				Expression result = interpreter.eval();
+					interpreter.printExpression(result);
+			}
+			catch (InterpreterSemanticError error){
+				std::cout << error.what() << "\n";
+				return EXIT_FAILURE;
 			}
 		}
 		else{ //otherwise the argument wasn't what it was expecting
@@ -97,4 +71,33 @@ int main(int argc, char*argv[])
 		return EXIT_FAILURE;
 	}
     return EXIT_SUCCESS;  //return success
+}
+
+void replMode()
+{
+	Interpreter interpreter;
+	std::string input;
+	while (true) {
+		cout << "vtscript>";
+		std::getline(cin, input);
+		if (input == "quit") { //if wants to quit then return
+			break;
+		}
+		else if (input != "") {
+			std::istringstream inputString(input);
+			if (!interpreter.parse(inputString)) { //if parse fails then print error
+				cout << "Error: Parsing error" << endl;
+			}
+			else { //if not failed then try to build tree and evaluate it
+				try { //try to evaluate the tree
+					Expression result = interpreter.eval();
+					interpreter.printExpression(result);
+					cout << "\n";
+				}
+				catch (InterpreterSemanticError error) { //if error thrown then catch it and display the error
+					std::cout << error.what() << "\n";
+				}
+			}
+		}
+	}
 }

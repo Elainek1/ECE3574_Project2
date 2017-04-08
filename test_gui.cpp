@@ -6,6 +6,7 @@
 #include "main_window.hpp"
 #include "message_widget.hpp"
 #include "repl_widget.hpp"
+#include <string>
 
 // ADD YOUR TESTS TO THIS CLASS !!!!!!!
 class TestGUI : public QObject {
@@ -23,6 +24,7 @@ private slots:
   void testLine();
   void testArc();
   void testEnvRestore();
+  void testHist();
 
 private:
   MainWindow w;
@@ -36,6 +38,11 @@ private:
   CanvasWidget *canvas;
   QGraphicsScene *scene;
   QGraphicsView * view;
+
+  REPLWidget replwid;
+  MessageWidget mess;
+  CanvasWidget can;
+  QtInterpreter qtinter;
 };
 
 void TestGUI::initTestCase() {
@@ -124,6 +131,24 @@ void TestGUI::testREPLBad() {
   QCOMPARE(p.highlight().color(), QColor(Qt::red));
   QVERIFY2(messageEdit->selectedText().startsWith("Error"),
            "Expected error to be selected.");
+
+  QTest::keyClicks(replEdit, "(foo");
+  QTest::keyClick(replEdit, Qt::Key_Return, Qt::NoModifier);
+
+  // check message
+  QVERIFY2(messageEdit->isReadOnly(),
+	  "Expected QLineEdit inside MessageWidget to be read-only.");
+  QVERIFY2(messageEdit->text().startsWith("Error"), "Expected error message.");
+
+
+  //bad + argument
+  QTest::keyClicks(replEdit, "(+ 1 True)");
+  QTest::keyClick(replEdit, Qt::Key_Return, Qt::NoModifier);
+
+  // check message
+  QVERIFY2(messageEdit->isReadOnly(),
+	  "Expected QLineEdit inside MessageWidget to be read-only.");
+  QVERIFY2(messageEdit->text().startsWith("Error"), "Expected error message.");
 }
 
 void TestGUI::testREPLBad2Good() {
@@ -169,12 +194,34 @@ void TestGUI::testPoint() {
   QVERIFY(canvas && scene);
 
   // send a string to the repl widget
-  QTest::keyClicks(replEdit, "(draw (point 0 0))");
+  QTest::keyClicks(replEdit, "(begin (define d (point 0 0)) (draw d) (d))");
   QTest::keyClick(replEdit, Qt::Key_Return, Qt::NoModifier);
 
   // check canvas
   QVERIFY2(scene->itemAt(QPointF(0, 0), QTransform()) != 0,
            "Expected a point in the scene. Not found.");
+}
+
+void TestGUI::testHist() {
+
+	QVERIFY(repl && replEdit);
+	QVERIFY(canvas && scene);
+
+	// send a string to the repl widget
+	QTest::keyClicks(replEdit, "(True)");
+	QTest::keyClick(replEdit, Qt::Key_Return, Qt::NoModifier);
+	QTest::keyClick(replEdit, Qt::Key_Up, Qt::NoModifier);
+	QTest::keyClick(replEdit, Qt::Key_Down, Qt::NoModifier);
+	QTest::keyClicks(replEdit, "(False)");
+	QTest::keyClick(replEdit, Qt::Key_Return, Qt::NoModifier);
+	QTest::keyClick(replEdit, Qt::Key_Up, Qt::NoModifier);
+	QTest::keyClick(replEdit, Qt::Key_Up, Qt::NoModifier);
+	QTest::keyClick(replEdit, Qt::Key_Down, Qt::NoModifier);
+	QTest::keyClick(replEdit, Qt::Key_Down, Qt::NoModifier);
+
+	// check canvas
+	QVERIFY2(scene->itemAt(QPointF(0, 0), QTransform()) != 0,
+		"Expected a point in the scene. Not found.");
 }
 
 void TestGUI::testLine() {
@@ -183,7 +230,7 @@ void TestGUI::testLine() {
   QVERIFY(canvas && scene);
 
   // send a string to the repl widget
-  QTest::keyClicks(replEdit, "(draw (line (point 10 0) (point 0 10)))");
+  QTest::keyClicks(replEdit, "(begin (define c1 (line (point 10 0) (point 0 10))) (draw c1) (c1))");
   QTest::keyClick(replEdit, Qt::Key_Return, Qt::NoModifier);
   
   // check canvas
@@ -199,7 +246,7 @@ void TestGUI::testArc() {
   QVERIFY(canvas && scene);
 
   // send a string to the repl widget
-  QTest::keyClicks(replEdit, "(draw (arc (point 0 0) (point 100 0) pi))");
+  QTest::keyClicks(replEdit, "(begin (define b (arc (point 0 0) (point 100 0) pi)) (draw b) (b))");
   QTest::keyClick(replEdit, Qt::Key_Return, Qt::NoModifier);
 
   // check canvas
@@ -207,6 +254,14 @@ void TestGUI::testArc() {
            "Expected a point on the arc in the scene. Not found.");
   QVERIFY2(scene->itemAt(QPointF(-100, 0), QTransform()) != 0,
            "Expected a point on the arc in the scene. Not found.");
+
+  // send a string to the repl widget
+  QTest::keyClicks(replEdit, "(begin (define e (arc (point 0 0) (point -10 -10) pi)) (draw e) (e))");
+  QTest::keyClick(replEdit, Qt::Key_Return, Qt::NoModifier);
+
+  // check canvas
+  QVERIFY2(scene->itemAt(QPointF(-10, -10), QTransform()) != 0,
+	  "Expected a point on the arc in the scene. Not found.");
 }
 
 void TestGUI::testEnvRestore() {

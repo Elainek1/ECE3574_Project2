@@ -30,9 +30,9 @@ public:
 	std::tuple<double, double> getPointSymbol(std::string symbol);
 	std::tuple<std::tuple<double, double>, std::tuple<double, double>> getLineSymbol(std::string symbol);
 	std::tuple<std::tuple<double, double>, std::tuple<double, double>, double> getArcSymbol(std::string symbol);
-	functPtr getFunctPtr(std::string symbol);
+	//functPtr getFunctPtr(std::string symbol);
 	//bool addBoolSymbol(std::string symbol, bool value);
-	void reset();
+	//void reset();
 private:
 	std::unordered_map < std::string, functPtr > environmentMap0;
 	std::unordered_map<std::string, double> environmentMap2;
